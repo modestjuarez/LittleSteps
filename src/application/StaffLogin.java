@@ -93,8 +93,7 @@ class StaffLogin extends Stage {
         	{
         		String username = nameInput.getText();
         		String password = passwordInput.getText();
-        		//String USERS_FILE = "C:\\Users\\cadem\\OneDrive\\Desktop\\School\\2024\\CSE 360\\staffMembers\\" + userType + "\\" + username + ".txt";
-        		//Changed above code to took for staffMembers directory in this LitteSteps directory/repo
+        		//Changed code to took for staffMembers directory in this LitteSteps directory/repo
         		String USERS_FILE = "staffMembers/" + userType + "/" + username + ".txt";
 
         		
@@ -102,7 +101,7 @@ class StaffLogin extends Stage {
             	
         			System.out.println("Succesful login!");
         			
-        			//pop up the nurse homepage when nurse succesfully logs in
+        			//added code to pop up the nurse homepage when nurse succesfully logs in
         			if(userType == "Nurse") {
         				NursesHomepage homepage = new NursesHomepage(username);
         	        	homepage.show();
