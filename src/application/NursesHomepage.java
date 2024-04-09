@@ -40,7 +40,7 @@ public class NursesHomepage extends Stage{
         //Load the logo image, throw an error if image file not found
         File logoFile = new File(LITTLESTEPS_LOGO);
         if (!logoFile.exists()) {
-        	Alert errorAlert = new Alert(Alert.AlertType.ERROR, "Logo ile not found at " + LITTLESTEPS_LOGO);
+        	Alert errorAlert = new Alert(Alert.AlertType.ERROR, "Logo file not found at " + LITTLESTEPS_LOGO);
             errorAlert.showAndWait();
         } else {
             Image logoImage = new Image(logoFile.toURI().toString());

@@ -6,18 +6,24 @@ import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyEvent;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class VitalsForm extends Stage {
+	//paths to the different directories needed in this file
 	private static final String CHECKED_IN_DIRECTORY = System.getProperty("user.home") + "/Documents/patient_data/checked_in";
-	//private static final String DOCTORS_DIRECTORY = System.getProperty("user.home") + "Documents/doctors_data";
+	private static final String DOCTORS_DIRECTORY = System.getProperty("user.home") + "Documents/doctors_data";
+	
 	//Patient directory path that will store the vitals info for the patients directory
 	private Path patientDirectoryPath;
+	
 	//flag to confirm if vitals file was created
 	private boolean fileSavedSuccessfully = false;
     
@@ -57,6 +63,13 @@ public class VitalsForm extends Stage {
         TextField doctorField = new TextField();
         doctorField.setPromptText("Enter the doctors name the the patient will see today");
         
+        //event filter to remove spaces from text that was entered
+        doctorField.addEventFilter(KeyEvent.KEY_TYPED, event -> {
+            if (event.getCharacter().equals(" ")) {
+                event.consume();
+            }
+        });
+        
         //Save button to save info entered
         Button saveVitalsBttn = new Button("Save Vitals");
         saveVitalsBttn.setOnAction(event -> {
@@ -69,9 +82,9 @@ public class VitalsForm extends Stage {
         	        heightField.getText(),
         	        bmiField.getText()
         	        );
-            //Save vitals data
+            //Save vitals data and create doctors appointment file
         	saveVitalsData(vitalsData);
-        	//saveDoctorsName(doctorField.getText());
+        	createDoctorsApptFile(doctorField.getText());
         	
         	//move the patient to 'checked_In' directory once vitals text file is created and stored in patients directory
         	if (this.fileSavedSuccessfully) {
@@ -125,25 +138,41 @@ public class VitalsForm extends Stage {
         }
     }
     
-    //method to create a doctormmdd_hhmm.txt file in the /doctors directory
-    /*
-     * private void saveDoctorsName(String doctorsName) {
-    	//setup the way the file will be saved
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MMdd");
-        LocalDate localDate = LocalDate.now();
-        String fileName = "vitals" + dtf.format(localDate) + ".txt";
-        
-        //
+    //method to create a doctormmdd_hhmm.txt file in the /doctors directory. 
+    //This will allow the doctor to see what appointments (s)he has that day and what patients he's seeing and when
+    private void createDoctorsApptFile(String doctorsName) {
+    	//make the text all lowercase
+    	String readyName = doctorsName.toLowerCase();
+    	
+    	//create a path to the doctors directory
+    	Path specificDoctorsDirPath = Paths.get(DOCTORS_DIRECTORY, readyName);
+    	
+    	//save file into the doctors directory and create the directory if it doesn't exist
         try {
-        	//Save the fil
-        	 Files.write(DOCTORS_DIRECTORY.resolve(fileName), doctorsName.getBytes());
-        	
+        	//directory doesn't exist for doctor, create it here
+            if (!Files.exists(specificDoctorsDirPath)) {
+                Files.createDirectories(specificDoctorsDirPath);
+            }
+            
+            //setup the way the file will be saved (doctorMMyy_HHmm.txt)
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MMyy_HHmm");
+            LocalDateTime now = LocalDateTime.now();
+            String fileName = "doctor" + dtf.format(now) + ".txt";
+            
+            //Prepare the content to be saved: the path to the patient directory
+            String contentToSave = patientDirectoryPath.toString();
+            
+            //Save the doctor's name into file in the doctors_data directory
+            Files.write(specificDoctorsDirPath.resolve(fileName), contentToSave.getBytes());
+            
+            //Display success message to run once the saving function is done running
+            Platform.runLater(() -> new Alert(Alert.AlertType.INFORMATION, "Doctor's appointment info saved successfully.").showAndWait());
         } catch (IOException e) {
-        	
+            e.printStackTrace();
+            //Display error if the file could not be saved
+            Platform.runLater(() -> new Alert(Alert.AlertType.ERROR, "Failed to save doctor's appointment info: " + e.getMessage()).showAndWait());
         }
-        
     }
-    */
     
     //method to move the patients directory into the checked_in folder
     private void movePatientDirectory() {
