@@ -148,10 +148,24 @@ public class NursesHomepage extends Stage{
         	new AddNewPatientForm();
         });
         
-        
         //Main layout
-        VBox mainLayout = new VBox(logo, menuBar, checkInPatientBttn, addNewPatientBttn);
+        VBox mainLayout = new VBox();
         mainLayout.setAlignment(Pos.TOP_CENTER);
+        
+        //HBox for the check-in button to center it
+        HBox checkInBttnBox = new HBox();
+        checkInBttnBox.setAlignment(Pos.CENTER);
+        checkInBttnBox.getChildren().add(checkInPatientBttn);
+        checkInBttnBox.setPadding(new Insets(10, 0, 10, 0)); // Add some padding at the top and bottom
+
+        // HBox for the add patient button to center it
+        HBox addPatientBttnBox = new HBox();
+        addPatientBttnBox.setAlignment(Pos.CENTER);
+        addPatientBttnBox.getChildren().add(addNewPatientBttn);
+        addPatientBttnBox.setPadding(new Insets(0, 0, 10, 0));
+        
+        //Add the logo, menu bar, and the two new HBoxes to the main VBox
+        mainLayout.getChildren().addAll(logo, menuBar, checkInBttnBox, addPatientBttnBox);
 
         //Set the scene for homepage
         Scene scene = new Scene(mainLayout, 800, 600);
