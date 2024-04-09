@@ -15,6 +15,7 @@ import java.time.format.DateTimeFormatter;
 
 public class VitalsForm extends Stage {
 	private static final String CHECKED_IN_DIRECTORY = System.getProperty("user.home") + "/Documents/patient_data/checked_in";
+	//private static final String DOCTORS_DIRECTORY = System.getProperty("user.home") + "Documents/doctors_data";
 	//Patient directory path that will store the vitals info for the patients directory
 	private Path patientDirectoryPath;
 	//flag to confirm if vitals file was created
@@ -52,6 +53,10 @@ public class VitalsForm extends Stage {
         TextField bmiField = new TextField();
         bmiField.setPromptText("Enter patient's BMI");
         
+        Label doctorLabel = new Label("Doctor:");
+        TextField doctorField = new TextField();
+        doctorField.setPromptText("Enter the doctors name the the patient will see today");
+        
         //Save button to save info entered
         Button saveVitalsBttn = new Button("Save Vitals");
         saveVitalsBttn.setOnAction(event -> {
@@ -66,6 +71,7 @@ public class VitalsForm extends Stage {
         	        );
             //Save vitals data
         	saveVitalsData(vitalsData);
+        	//saveDoctorsName(doctorField.getText());
         	
         	//move the patient to 'checked_In' directory once vitals text file is created and stored in patients directory
         	if (this.fileSavedSuccessfully) {
@@ -75,13 +81,15 @@ public class VitalsForm extends Stage {
         	this.close();
         });
 
+        //add all labels and fields to VBox
         formLayout.getChildren().addAll(
                 tempLabel, tempField,
                 pulseLabel, pulseField,
                 bloodPressureLabel, bloodPressureField,
                 weightLabel, weightField,
                 heightLabel, heightField,
-                bmiLabel, bmiField,
+                bmiLabel, bmiField, 
+                doctorLabel, doctorField,
                 saveVitalsBttn
         );
 
@@ -99,13 +107,14 @@ public class VitalsForm extends Stage {
     //method to save the vitals data text file inside the patients directory
     private void saveVitalsData(String vitalsData) {
     	
-        //vitalsData is a String containing the vitals to be saved
+        //Code to format the way the text file will be saved: vitalsMMddyy.txt
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MMddyy");
         LocalDate localDate = LocalDate.now();
         String fileName = "vitals" + dtf.format(localDate) + ".txt";
         
         //create text file and store in patients directory
         try {
+        	//vitalsData is a String containing the vitals to be saved
             Files.write(patientDirectoryPath.resolve(fileName), vitalsData.getBytes());//save vitals text file
             fileSavedSuccessfully = true;//change flag to true when file created
             new Alert(Alert.AlertType.ERROR, "Vitals data file saved succesfully to " + patientDirectoryPath.toString()).showAndWait();
@@ -115,6 +124,26 @@ public class VitalsForm extends Stage {
             	new Alert(Alert.AlertType.ERROR, "Failed to save vitals data.").showAndWait();
         }
     }
+    
+    //method to create a doctormmdd_hhmm.txt file in the /doctors directory
+    /*
+     * private void saveDoctorsName(String doctorsName) {
+    	//setup the way the file will be saved
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MMdd");
+        LocalDate localDate = LocalDate.now();
+        String fileName = "vitals" + dtf.format(localDate) + ".txt";
+        
+        //
+        try {
+        	//Save the fil
+        	 Files.write(DOCTORS_DIRECTORY.resolve(fileName), doctorsName.getBytes());
+        	
+        } catch (IOException e) {
+        	
+        }
+        
+    }
+    */
     
     //method to move the patients directory into the checked_in folder
     private void movePatientDirectory() {
