@@ -26,9 +26,13 @@ public class NursesHomepage extends Stage{
 	//private static final String PATIENT_FILE_DIRECTORY = System.getProperty("user.home") + "/Documents/patient_data";
 	//private static final String CHECKED_IN_DIRECTORY = System.getProperty("user.home") + "/Documents/patient_data/checked_in";
 	private static final String LITTLESTEPS_LOGO = System.getProperty("user.home") + "/Documents/Logo/logoName.jpeg";
+	//var holds the name of the file of the signed in nurse
+	private String nurseUsername;
 	
 	//Homepage that will pop up once the nurse signs in
-	public NursesHomepage() {
+	public NursesHomepage(String nurseUsername) {
+		
+		this.nurseUsername = nurseUsername;
 		
 		//logo HBox for the company logo
         HBox logo = new HBox();
@@ -54,12 +58,15 @@ public class NursesHomepage extends Stage{
 		 * 
 		 * 
 		 * *****************************************
-		 *  Code goes here to retrieve nurse name  *
+		 *  Code to retrieve nurse name  *
 		 * *****************************************
 		 *
          * 
          * ************************************************/
-        String nurseName = "Placeholder";
+        //create an array of all the nurse files in the Nurse directory
+        String nurse = "Nurse " + nurseUsername.substring(5, nurseUsername.length());//Adds space after the word Nurse
+
+   
 		
         //Set up the top menu bar of the homepage
         HBox menuBar = new HBox();
@@ -68,7 +75,7 @@ public class NursesHomepage extends Stage{
         menuBar.setStyle("-fx-background-color: #3c3c3c;");//grey color for the menu bar
 
         //Welcome message for the specific nurse
-        Text welcomeText = new Text("Welcome " + nurseName + "!");
+        Text welcomeText = new Text("Welcome " + nurse + "!");
         welcomeText.setStyle("-fx-font-size: 16px; -fx-fill: white;");//text color and size welcome section
 
         //Spacer to push buttons to the right of the menu bar
