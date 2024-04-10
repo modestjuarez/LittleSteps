@@ -13,8 +13,21 @@ import java.util.Map;
 import javafx.scene.control.Alert;
 
 public class PatientFileManager {
-	//Directory path where patient files/directories are contained
-    private static final String PATIENT_FILE_DIRECTORY = System.getProperty("user.home") + "/Documents/patient_data";
+	/******************************************************************
+	 * 
+	 * DIRECTORY PATH OPTIONS TO CHOOSE FROM:
+	 * 
+	 * to save the patient_data directly into the repo directory uncomment first string below but if you run into any permissions
+	 * issues, you'll now because it will fail to create the directory for the patient (will run lines 44-47),
+	 * then leave current string (line 30) uncommented. 
+	 * 
+	 * Note: If you change the string used here, then do the same to the string used at the top of the VitalsForm.java file
+	 * 
+	 ******************************************************************/
+	//Directory path to repo LittleSteps directory. Will create /LittleSteps/patient_data if permissions allow
+	//private static final String PATIENT_FILE_DIRECTORY = "/patient_data";	
+	//Directory path to users /Home/Documents/patient_data folder where patient files are contained 
+	private static final String PATIENT_FILE_DIRECTORY = System.getProperty("user.home") + "/Documents/patient_data";
      
     public void createPatientDirectory(String firstName, String lastName, LocalDate dob, String email, String healthIssues, String medications, String pharmacy, String appointment, String notes, String immunizationHistory) {
         //format the entered date of birth to only two digits for month, day, and year
@@ -23,9 +36,17 @@ public class PatientFileManager {
         String dirName = String.format("%s_%s%s", firstName.toLowerCase(), lastName.toLowerCase(), dobFormatted);
         File patientDir = new File(PATIENT_FILE_DIRECTORY, dirName);
         
-        //Create the patient directory, throw an error message if it already exists
+        //create the patient directory, throw an error message if it already exists
         if (!patientDir.exists()) {
-            patientDir.mkdirs();
+            //patientDir.mkdirs();
+        	boolean dirCreated = patientDir.mkdirs();
+            if (!dirCreated) {
+                //directory creation failed
+                System.out.println("Failed to create directory: " + patientDir.getPath());
+                System.out.println("mkdirs() returns " + dirCreated);
+                return;//stop execution if directory wasn't created
+            } else
+            	System.out.println("Created the following directory succesfully: " + patientDir.getPath());
         }
         else {
         	Alert errorAlert = new Alert(Alert.AlertType.ERROR, "User is already in the system, please use search function to lookup patient file");
@@ -51,8 +72,9 @@ public class PatientFileManager {
             new File(patientDir, "login.txt").createNewFile();
         } catch (IOException e) {
             e.printStackTrace();
-            Alert errorAlert = new Alert(Alert.AlertType.ERROR, "Could not create the patient profile directory.");
-            errorAlert.showAndWait();
+            System.out.println("Failed to write file in directory: " + patientDir.getPath());
+            System.out.println("Exception message: " + e.getMessage());
+            new Alert(Alert.AlertType.ERROR, "Could not create the patient profile directory.").showAndWait();
         }
     }
     
@@ -117,27 +139,6 @@ public class PatientFileManager {
         new Alert(Alert.AlertType.ERROR, "Directory not found for the patient entered").showAndWait();
         return null; //no directory is found matching the criteria
     }
-    
-    
-    /*****************************f*****************
-     * 
-     * *******************************************
-     * Possible methods for this class are below *
-     * *******************************************
-     * 
-     * could be a:
-     *  - method to updateContactInfo to update the contactInfo.txt file
-     *  - method to look for and update the healthIssue.txt file
-     *  - method to look for and update immunization.txt file
-     *  - method to check if patient exists
-     * *********************************************/
-    
-	/*
-    //method to save, update, or create patient directory and patient's contactInfo.txt file
-    private void saveContactInfo(String patientDirectoryName, String fname, String lname, String dob, String parentsEmail) {
-
-    }//end of saveFile method
-    */
 }
 
 

@@ -22,7 +22,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class NursesHomepage extends Stage{
-	//Directory path where patient files/directories are contained
+	//Directory path in repo where patient files/directories are contained
 	private static final String LITTLESTEPS_LOGO = "Logo/logoName.jpeg";
 	//var holds the name of the file of the signed in nurse
 	private String nurseUsername;

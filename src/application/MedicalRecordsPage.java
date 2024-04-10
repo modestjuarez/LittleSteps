@@ -55,7 +55,7 @@ public class MedicalRecordsPage extends VBox {
 		/* START OF UPPER HBOX UI */
 		
 		try {
-			inputStream = new FileInputStream(System.getProperty("user.home") + "/Documents/Logo/logoName.jpeg");
+			inputStream = new FileInputStream("/Logo/logoName.jpeg");//changed path to LittleSteps/Logo directory
 		} catch (FileNotFoundException e) {
 			System.out.println("File not found");
 		} 
