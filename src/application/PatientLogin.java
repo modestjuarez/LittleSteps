@@ -184,7 +184,7 @@ class PatientLogin extends Stage {
 	        }
 	    });
 
-	    searchVbox.getChildren().addAll(new Label("Enter Patient Details:"), firstNameField, lastNameField, dobField, password, submitButton);
+	    searchVbox.getChildren().addAll(new Label("Enter New Patient Details:"), firstNameField, lastNameField, dobField, password, submitButton);
 	    
 	    Scene dialogScene = new Scene(searchVbox, 300, 300);
 	    searchWindow.setScene(dialogScene);
@@ -219,7 +219,7 @@ class PatientLogin extends Stage {
             
         } catch (IOException e) {
             e.printStackTrace();
-            Alert errorAlert = new Alert(Alert.AlertType.ERROR, "Could not create the patient profile directory.");
+            Alert errorAlert = new Alert(Alert.AlertType.ERROR, "Could not create account.");
             errorAlert.showAndWait();
         }
     }
