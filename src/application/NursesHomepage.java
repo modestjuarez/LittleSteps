@@ -23,9 +23,7 @@ import javafx.stage.Stage;
 
 public class NursesHomepage extends Stage{
 	//Directory path where patient files/directories are contained
-	//private static final String PATIENT_FILE_DIRECTORY = System.getProperty("user.home") + "/Documents/patient_data";
-	//private static final String CHECKED_IN_DIRECTORY = System.getProperty("user.home") + "/Documents/patient_data/checked_in";
-	private static final String LITTLESTEPS_LOGO = System.getProperty("user.home") + "/Documents/Logo/logoName.jpeg";
+	private static final String LITTLESTEPS_LOGO = "Logo/logoName.jpeg";
 	//var holds the name of the file of the signed in nurse
 	private String nurseUsername;
 	
@@ -55,14 +53,9 @@ public class NursesHomepage extends Stage{
         }
 		
 		/**************************************************
-		 * 
-		 * 
-		 * *****************************************
-		 *  Code to retrieve nurse name  *
-		 * *****************************************
-		 *
-         * 
+		        *  Code to retrieve nurse name  *
          * ************************************************/
+        
         //create an array of all the nurse files in the Nurse directory
         String nurse = "Nurse " + nurseUsername.substring(5, nurseUsername.length());//Adds space after the word Nurse
 
@@ -213,7 +206,7 @@ public class NursesHomepage extends Stage{
 
 	    searchVbox.getChildren().addAll(new Label("Enter Patient Details:"), firstNameField, lastNameField, dobField, submitButton);
 	    
-	    Scene dialogScene = new Scene(searchVbox, 300, 200);
+	    Scene dialogScene = new Scene(searchVbox, 300, 250);
 	    searchWindow.setScene(dialogScene);
 	    searchWindow.showAndWait();
 
