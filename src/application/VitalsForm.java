@@ -19,7 +19,7 @@ import java.time.format.DateTimeFormatter;
 public class VitalsForm extends Stage {
 	//paths to the different directories needed in this file
 	private static final String CHECKED_IN_DIRECTORY = System.getProperty("user.home") + "/Documents/patient_data/checked_in";
-	private static final String DOCTORS_DIRECTORY = System.getProperty("user.home") + "Documents/doctors_data";
+	private static final String DOCTORS_DIRECTORY = System.getProperty("user.home") + "/Documents/doctors_data";
 	
 	//Patient directory path that will store the vitals info for the patients directory
 	private Path patientDirectoryPath;
@@ -157,7 +157,7 @@ public class VitalsForm extends Stage {
             //setup the way the file will be saved (doctorMMyy_HHmm.txt)
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MMyy_HHmm");
             LocalDateTime now = LocalDateTime.now();
-            String fileName = "doctor" + dtf.format(now) + ".txt";
+            String fileName = dtf.format(now) + ".txt";
             
             //Prepare the content to be saved: the path to the patient directory
             String contentToSave = patientDirectoryPath.toString();
