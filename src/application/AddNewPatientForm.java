@@ -97,9 +97,9 @@ public class AddNewPatientForm extends Stage {
                     newPatient.createPatientDirectory(firstName, lastName, dob, email, healthIssues, medications, pharmacy, appointment, notes, immunizationHistory);
 
                     //If no exceptions thrown, show a success message
-                    Alert successAlert = new Alert(Alert.AlertType.INFORMATION, "Patient profile created successfully.");
-                    successAlert.setHeaderText("Success");
-                    successAlert.showAndWait();
+                    //Alert successAlert = new Alert(Alert.AlertType.INFORMATION, "Patient profile created successfully.");
+                    //successAlert.setHeaderText("Success");
+                    //successAlert.showAndWait();
 
                     //Close the form
                     this.close();

@@ -16,8 +16,19 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 public class VitalsForm extends Stage {
-	//paths to the different directories needed in this file
+	/******************************************************************
+	 * 
+	 * DIRECTORY PATH OPTIONS TO CHOOSE FROM:
+	 * 
+	 * First check the path in PatientFileManager. Uncomment whichever of the two Strings below to
+	 * reflect the option chosen in the PatientFileManager.java file
+	 * 
+	 ******************************************************************/
+	//Directory path to repo LittleSteps directory. Will create /LittleSteps/patient_data/checked_in if permissions allow
+	//private static final String CHECKED_IN_DIRECTORY = "/patient_data/checked_in";
+	//Directory path to users /Home/Documents/patient_data folder where patient files are contained 
 	private static final String CHECKED_IN_DIRECTORY = System.getProperty("user.home") + "/Documents/patient_data/checked_in";
+	
 	/*
 	 * 
 	 * private static final String DOCTORS_DIRECTORY = System.getProperty("user.home") + "/Documents/doctors_data";
@@ -62,12 +73,12 @@ public class VitalsForm extends Stage {
         TextField bmiField = new TextField();
         bmiField.setPromptText("Enter patient's BMI");
         
-        Label doctorLabel = new Label("Doctor:");
+       /* Label doctorLabel = new Label("Doctor:");
         TextField doctorField = new TextField();
         doctorField.setPromptText("Enter the doctors name the the patient will see today");
         
         //event filter to remove spaces from text that was entered
-        /*doctorField.addEventFilter(KeyEvent.KEY_TYPED, event -> {
+        doctorField.addEventFilter(KeyEvent.KEY_TYPED, event -> {
             if (event.getCharacter().equals(" ")) {
                 event.consume();
             }
@@ -109,7 +120,7 @@ public class VitalsForm extends Stage {
                 weightLabel, weightField,
                 heightLabel, heightField,
                 bmiLabel, bmiField, 
-                doctorLabel, doctorField,
+                //doctorLabel, doctorField,
                 saveVitalsBttn
         );
 
@@ -137,11 +148,14 @@ public class VitalsForm extends Stage {
         	//vitalsData is a String containing the vitals to be saved
             Files.write(patientDirectoryPath.resolve(fileName), vitalsData.getBytes());//save vitals text file
             fileSavedSuccessfully = true;//change flag to true when file created
-            new Alert(Alert.AlertType.ERROR, "Vitals data file saved succesfully to " + patientDirectoryPath.toString()).showAndWait();
+            System.out.print("Vitals data saved succesfully to " + patientDirectoryPath.toString());
+            new Alert(Alert.AlertType.INFORMATION, "Vitals data saved succesfully in patients directory").showAndWait();
         } catch (IOException e) {
             e.printStackTrace();
-            if(fileSavedSuccessfully == false)
-            	new Alert(Alert.AlertType.ERROR, "Failed to save vitals data.").showAndWait();
+            if(fileSavedSuccessfully == false) {
+            	System.out.print("Vitals data could not be saved to " + patientDirectoryPath.toString());
+            	new Alert(Alert.AlertType.ERROR, "Failed to save vitals data in patient directory.").showAndWait();
+            }
         }
     }
     
@@ -199,7 +213,7 @@ public class VitalsForm extends Stage {
                 Platform.runLater(() -> new Alert(Alert.AlertType.ERROR, "A directory with the same name already exists in the checked_in folder.").showAndWait());
             } else {
                 Files.move(patientDirectoryPath, targetPath);
-                Platform.runLater(() -> new Alert(Alert.AlertType.INFORMATION, "Patient directory moved successfully.").showAndWait());
+                Platform.runLater(() -> new Alert(Alert.AlertType.INFORMATION, "Patient directory moved successfully to reflect checked in status.").showAndWait());
             }
         } catch (IOException e) {
             e.printStackTrace();

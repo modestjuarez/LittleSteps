@@ -1,5 +1,7 @@
 package application;
 
+import java.io.File;
+
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -27,7 +29,10 @@ class PatientLogin extends Stage {
         primaryStage.setTitle("Staff Login");
 
         BorderPane everything = new BorderPane();
-        Image logoImage = new Image("file:///C:/Users/cadem/OneDrive/Desktop/School/2024/CSE%20360/littlePic.png");
+        
+        //changed code to get logo jpg file from the Logo folder in repo directory
+        File logoFile = new File("Logo/logoName.jpeg");
+        Image logoImage = new Image(logoFile.toURI().toString());
         ImageView logoImageView = new ImageView(logoImage);
         logoImageView.setFitWidth(130); // Set the width to 200 pixels
         logoImageView.setPreserveRatio(true); // Preserve the aspect ratio
