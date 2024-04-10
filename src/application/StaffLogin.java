@@ -1,6 +1,7 @@
 package application;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
@@ -35,7 +36,12 @@ class StaffLogin extends Stage {
         primaryStage.setTitle("Staff Login");
 
         BorderPane everything = new BorderPane();
-        Image logoImage = new Image("file:///C:/Users/cadem/OneDrive/Desktop/School/2024/CSE%20360/littlePic.png");
+        
+        //code to get logo jpg file from the Logo folder in the LittleSteps directory
+        File logoFile = new File("Logo/logoName.jpeg");
+        Image logoImage = new Image(logoFile.toURI().toString());
+        
+        //Image logoImage = new Image("file:///C:/Users/cadem/OneDrive/Desktop/School/2024/CSE%20360/littlePic.png");
         ImageView logoImageView = new ImageView(logoImage);
         logoImageView.setFitWidth(130); // Set the width to 200 pixels
         logoImageView.setPreserveRatio(true); // Preserve the aspect ratio

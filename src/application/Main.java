@@ -1,5 +1,7 @@
 package application;
 	
+import java.io.File;
+
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -31,7 +33,11 @@ public class Main extends Application {
         root.setAlignment(Pos.TOP_CENTER);
         root.setPadding(new Insets(20));
         
-        Image logoImage = new Image("file:///C:/Users/cadem/OneDrive/Desktop/School/2024/CSE%20360/mainLogoLittleSteps.png");
+        //code to get logo jpg file from the Logo folder in the LittleSteps directory
+        File logoFile = new File("Logo/logoFull.jpeg");
+        Image logoImage = new Image(logoFile.toURI().toString());
+        
+        //Image logoImage = new Image("file:///C:/Users/cadem/OneDrive/Desktop/School/2024/CSE%20360/mainLogoLittleSteps.png");
         ImageView logoImageView = new ImageView(logoImage);
         logoImageView.setFitWidth(200); // Set the width to 200 pixels
         logoImageView.setPreserveRatio(true);
