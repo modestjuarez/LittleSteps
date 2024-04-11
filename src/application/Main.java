@@ -92,7 +92,7 @@ public class Main extends Application {
 
     private void showPatientLogin() {
         root.getChildren().clear();
-        PatientLogin patientLogin = new PatientLogin(this::showMainPage);
+        PatientLogin patientLogin = new PatientLogin(this, this::showMainPage);
         patientLogin.start(primaryStage);
     }
 

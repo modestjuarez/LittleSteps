@@ -18,16 +18,18 @@ public class PatientFileManager {
 	 * DIRECTORY PATH OPTIONS TO CHOOSE FROM:
 	 * 
 	 * to save the patient_data directly into the repo directory uncomment first string below but if you run into any permissions
-	 * issues, you'll now because it will fail to create the directory for the patient (will run lines 44-47),
-	 * then leave current string (line 30) uncommented. 
+	 * issues, you'll now because it will fail to create the directory for the patient (will run lines 48-50),
+	 * then leave current string (lines 30-32) active. 
 	 * 
 	 * Note: If you change the string used here, then do the same to the string used at the top of the VitalsForm.java file
 	 * 
 	 ******************************************************************/
 	//Directory path to repo LittleSteps directory. Will create /LittleSteps/patient_data if permissions allow
-	//private static final String PATIENT_FILE_DIRECTORY = "/patient_data";	
+	//private static final String PATIENT_FILE_DIRECTORY = File.separator + "patient_data";
 	//Directory path to users /Home/Documents/patient_data folder where patient files are contained 
-	private static final String PATIENT_FILE_DIRECTORY = System.getProperty("user.home") + "/Documents/patient_data";
+	private static final String PATIENT_FILE_DIRECTORY = System.getProperty("user.home") 
+		    + File.separator + "Documents" 
+		    + File.separator + "patient_data";
      
     public void createPatientDirectory(String firstName, String lastName, LocalDate dob, String email, String healthIssues, String medications, String pharmacy, String appointment, String notes, String immunizationHistory) {
         //format the entered date of birth to only two digits for month, day, and year

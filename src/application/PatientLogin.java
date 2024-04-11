@@ -26,6 +26,19 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 class PatientLogin extends Stage {
+	/******************************************************************
+	 * 
+	 * DIRECTORY PATH OPTIONS TO CHOOSE FROM:
+	 * 
+	 * First check the path in PatientFileManager. Uncomment whichever of the two Strings below to
+	 * reflect the option chosen in the PatientFileManager.java file
+	 * 
+	 ******************************************************************/
+	//Directory path to repo LittleSteps directory. Will create /LittleSteps/patient_data were files are contained
+	//private static final String PATIENT_FILE_DIRECTORY = File.separator + "patient_data";
+	private static final String PATIENT_FILE_DIRECTORY = System.getProperty("user.home") + File.separator + "Documents" 
+		    + File.separator + "patient_data";
+	
 
 	private Runnable onBack;
 	private Main main;
@@ -39,7 +52,10 @@ class PatientLogin extends Stage {
         primaryStage.setTitle("Staff Login");
 
         BorderPane everything = new BorderPane();
-        Image logoImage = new Image("file:///C:/Users/cadem/OneDrive/Desktop/School/2024/CSE%20360/littlePic.png");
+        
+        //changed code to get logo jpg file from the Logo folder in repo directory
+        File logoFile = new File("Logo/logoName.jpeg");
+        Image logoImage = new Image(logoFile.toURI().toString());
         ImageView logoImageView = new ImageView(logoImage);
         logoImageView.setFitWidth(130); // Set the width to 200 pixels
         logoImageView.setPreserveRatio(true); // Preserve the aspect ratio
@@ -85,9 +101,20 @@ class PatientLogin extends Stage {
         
         		String username = nameInput.getText();
         		String password = passwordInput.getText();
+        		//Changed code to took for patient_data directory in this LitteSteps directory/repo
+        		//String USERS_FILE = "patients_data" + userType + File.separator + username + ".txt";
         		String USERS_FILE = "C:\\Users\\cadem\\OneDrive\\Desktop\\School\\2024\\CSE 360\\patients\\" + username + ".txt";
         		if (isValidUser(username, password, USERS_FILE)) {
-        			main.showNurseHomepage();
+        			
+        			/************************************************************
+        			 * 
+        			 * **********************************************************
+        			 * code to pop up the patients homepage goes here
+        			 ************************************************************
+        			 *
+        			 *
+        			 ************************************************************/
+        			
         		} else {
       
         			System.out.println("Unsuccesful login.");
@@ -206,7 +233,8 @@ class PatientLogin extends Stage {
     }
     
     public void createPatientDirectory(String firstName, String lastName, String dob, String password){
-    	String PATIENT_FILE_DIRECTORY = "C:\\\\Users\\\\cadem\\\\OneDrive\\\\Desktop\\\\School\\\\2024\\\\CSE 360\\\\patients\\\\";
+    	
+    	//String PATIENT_FILE_DIRECTORY = "C:\\\\Users\\\\cadem\\\\OneDrive\\\\Desktop\\\\School\\\\2024\\\\CSE 360\\\\patients\\\\";
         String textFile = String.format("%s_%s%s.txt", firstName.toLowerCase(), lastName.toLowerCase(), dob);
         File patientFile = new File(PATIENT_FILE_DIRECTORY);
         String userinfo = firstName.toLowerCase() + "_" + lastName.toLowerCase() + dob + " " + password;
