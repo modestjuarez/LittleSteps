@@ -107,13 +107,13 @@ class PatientLogin extends Stage {
     		 * Code I need to add to retrieve login info inside the /patient_data/firstname_lastnameDOBdigits/login.txt is uncomment below
     		 */
         	
-        	/*
+        	///*
         		String username = nameInput.getText();
         		String password = passwordInput.getText();
         		
-        		//Changed code to took for patient_data directory in this LitteSteps directory/repo
-        		//String USERS_FILE = "patients_data" + userType + File.separator + username + ".txt";
-        		String USERS_FILE = "C:\\Users\\cadem\\OneDrive\\Desktop\\School\\2024\\CSE 360\\patients\\" + username + ".txt";
+        		//Changed code to took for patient_data directory 
+        		String USERS_FILE = "patients_data" + File.separator + username + ".txt";
+        		//String USERS_FILE = "C:\\Users\\cadem\\OneDrive\\Desktop\\School\\2024\\CSE 360\\patients\\" + username + ".txt";
         		if (isValidUser(username, password, USERS_FILE)) {
         			
         			/************************************************************
@@ -124,13 +124,15 @@ class PatientLogin extends Stage {
         			 ************************************************************
         			 *
         			 *
-        			 ************************************************************
+        			 ************************************************************/
+        			
+        			//main.showNurseHomepage();
         			
         		} else {
       
         			System.out.println("Unsuccesful login.");
         		}
-        		*/
+        		///
 
         });
         
