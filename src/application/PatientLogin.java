@@ -102,6 +102,7 @@ class PatientLogin extends Stage {
         	//add the code that will just pop up the patient homepage once login button is pressed. 
         	//It's what you would have in the dummy main file you worked on when testing your code
         
+        	System.out.print("Homepage is open without need for login info");
         	/* 
     		 * Code I need to add to retrieve login info inside the /patient_data/firstname_lastnameDOBdigits/login.txt is uncomment below
     		 */
