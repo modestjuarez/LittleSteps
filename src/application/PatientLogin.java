@@ -98,15 +98,18 @@ class PatientLogin extends Stage {
         loginButton.setPrefWidth(200);
 
         loginButton.setOnAction(e -> {
+        	
+        	//add the code that will just pop up the patient homepage once login button is pressed. 
+        	//It's what you would have in the dummy main file you worked on when testing your code
         
+        	/* 
+    		 * Code I need to add to retrieve login info inside the /patient_data/firstname_lastnameDOBdigits/login.txt is uncomment below
+    		 */
+        	
+        	/*
         		String username = nameInput.getText();
         		String password = passwordInput.getText();
         		
-        		/* 
-        		 * 
-        		 * Code I need to add to retrieve login info inside the /patient_data/firstname_lastnameDOBdigits/login.txt
-        		 * 
-        		 */
         		//Changed code to took for patient_data directory in this LitteSteps directory/repo
         		//String USERS_FILE = "patients_data" + userType + File.separator + username + ".txt";
         		String USERS_FILE = "C:\\Users\\cadem\\OneDrive\\Desktop\\School\\2024\\CSE 360\\patients\\" + username + ".txt";
@@ -114,17 +117,19 @@ class PatientLogin extends Stage {
         			
         			/************************************************************
         			 * 
+        			 * 
         			 * **********************************************************
         			 * code to pop up the patients homepage goes here
         			 ************************************************************
         			 *
         			 *
-        			 ************************************************************/
+        			 ************************************************************
         			
         		} else {
       
         			System.out.println("Unsuccesful login.");
         		}
+        		*/
 
         });
         
