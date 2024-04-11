@@ -1,7 +1,13 @@
 package application;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
+import java.nio.file.Paths;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -22,7 +28,10 @@ import javafx.scene.text.FontWeight;
 public class DoctorHomePage extends VBox {
 	DoctorView doctorViewStage;
 	
-	VBox patientInformationLabelVBox;
+	private static final String PATIENT_FILE_DIRECTORY = System.getProperty("user.home") + File.separator + "Documents" + File.separator + "patient_data";
+	File patientDir;
+	
+	VBox patientInformationVBox;
 	Label patientInformationEntryLabel;
 	TextField patientInformationEntryTextField;
 	Button patientInformationEntryButton;
@@ -51,7 +60,7 @@ public class DoctorHomePage extends VBox {
 	TextArea patientMedicationsDisplayTextArea;
 	Button patientMedicationsSaveButton;
 		
-	public DoctorHomePage(DoctorView stage, String doctorTextFile) {
+	public DoctorHomePage(DoctorView stage) {
 		doctorViewStage = stage;
 		
 		/* START OF LABEL VBOX UI */
@@ -70,31 +79,28 @@ public class DoctorHomePage extends VBox {
 		patientInformationEntryButton.setMaxWidth(250);
 		patientInformationEntryButton.setStyle("-fx-text-fill: white; -fx-background-color: cornflowerblue;");
 		
-		patientInformationLabel = new Label("Patient Name Information");
+		patientInformationLabel = new Label();
 		patientInformationLabel.setTextFill(Color.BLACK);
-		patientInformationLabel.setFont(Font.font("Verdana", FontWeight.MEDIUM, 24));
+		patientInformationLabel.setFont(Font.font("Verdana", FontWeight.MEDIUM, 20));
 		
 		patientInformationErrorLabel = new Label("Error: Patient's information does not exist");
 		patientInformationErrorLabel.setTextFill(Color.RED);
 		patientInformationErrorLabel.setFont(Font.font("Verdana", FontWeight.BOLD, 15));
 		
-		patientInformationLabelVBox = new VBox();
+		patientInformationVBox = new VBox();
 		
-		patientInformationLabelVBox.getChildren().add(patientInformationEntryLabel);
-		patientInformationLabel.setAlignment(Pos.CENTER);
+		patientInformationVBox.getChildren().add(patientInformationEntryLabel);
+		patientInformationEntryLabel.setAlignment(Pos.CENTER);
 		
-		patientInformationLabelVBox.getChildren().add(patientInformationEntryTextField);
+		patientInformationVBox.getChildren().add(patientInformationEntryTextField);
 		patientInformationEntryTextField.setAlignment(Pos.CENTER);
 		
-		patientInformationLabelVBox.getChildren().add(patientInformationEntryButton);
+		patientInformationVBox.getChildren().add(patientInformationEntryButton);
 		patientInformationEntryButton.setAlignment(Pos.CENTER);
 		
-		// patientInformationLabelVBox.getChildren().add(patientInformationErrorLabel);
-		// patientInformationErrorLabel.setAlignment(Pos.CENTER);
+		patientInformationVBox.setPadding(new Insets(0, 0, 20, 0));
 		
-		patientInformationLabelVBox.setPadding(new Insets(0, 0, 20, 0));
-		
-		patientInformationLabelVBox.setSpacing(15);
+		patientInformationVBox.setSpacing(15);
 
 		/* END OF LABEL VBOX UI */
 		
@@ -110,26 +116,30 @@ public class DoctorHomePage extends VBox {
 		patientFindingsEntryTextArea.setMaxHeight(100);
 		patientFindingsEntryTextArea.setMaxWidth(200);
 		patientFindingsEntryTextArea.setFont(Font.font("Verdana", 14));
+		patientFindingsEntryTextArea.setEditable(false);
+		patientFindingsEntryTextArea.setMouseTransparent(true);
+		patientFindingsEntryTextArea.setFocusTraversable(false);
 		
 		patientFindingsAddButton = new Button("Add Patient Findings");
 		patientFindingsAddButton.setFont(Font.font("Verdana", FontWeight.MEDIUM, 14));
 		patientFindingsAddButton.setMaxHeight(30); 
 		patientFindingsAddButton.setMaxWidth(175);
 		patientFindingsAddButton.setStyle("-fx-text-fill: white; -fx-background-color: cornflowerblue;");
-		
+		patientFindingsAddButton.setDisable(true);
+
 		patientFindingsDisplayTextArea = new TextArea();
 		patientFindingsDisplayTextArea.setMaxHeight(100);
 		patientFindingsDisplayTextArea.setMaxWidth(200);
 		patientFindingsDisplayTextArea.setFont(Font.font("Verdana", 14));
 		patientFindingsDisplayTextArea.setEditable(false);
-		patientFindingsDisplayTextArea.setMouseTransparent(true);
 		patientFindingsDisplayTextArea.setFocusTraversable(false);
 		
 		patientFindingsSaveButton = new Button("Save Patient Findings");
 		patientFindingsSaveButton.setFont(Font.font("Verdana", FontWeight.MEDIUM, 14));
 		patientFindingsSaveButton.setMaxHeight(30); 
 		patientFindingsSaveButton.setMaxWidth(175);
-	
+		patientFindingsSaveButton.setDisable(true);
+
 		leftDoctorHomePageVBox = new VBox();
 		
 		leftDoctorHomePageVBox.getChildren().add(patientFindingsLabel);
@@ -153,7 +163,8 @@ public class DoctorHomePage extends VBox {
 		/* START OF CENTER VBOX UI */
 				
 		try {
-			inputStream = new FileInputStream(System.getProperty("user.home") + "/Documents/Logo/logoName.jpeg");
+			inputStream = new FileInputStream("Logo/logoFull.jpeg");
+			System.out.print("Logo image located");
 		} catch (FileNotFoundException e) {
 			System.out.println("File not found");
 		} 
@@ -170,6 +181,7 @@ public class DoctorHomePage extends VBox {
 		patientMedicalRecordsButton.setMaxHeight(30); 
 		patientMedicalRecordsButton.setMaxWidth(200);
 		patientMedicalRecordsButton.setStyle("-fx-text-fill: white; -fx-background-color: cornflowerblue;");
+		patientMedicalRecordsButton.setDisable(true);
 		
 		centerDoctorHomePageVBox = new VBox();
 
@@ -194,26 +206,30 @@ public class DoctorHomePage extends VBox {
 		patientMedicationsEntryTextArea.setMaxHeight(100);
 		patientMedicationsEntryTextArea.setMaxWidth(200);
 		patientMedicationsEntryTextArea.setFont(Font.font("Verdana", 14));
+		patientMedicationsEntryTextArea.setEditable(false);
+		patientMedicationsEntryTextArea.setMouseTransparent(true);
+		patientMedicationsEntryTextArea.setFocusTraversable(false);
 		
 		patientMedicationsAddButton = new Button("Add Patient Medications");
 		patientMedicationsAddButton.setFont(Font.font("Verdana", FontWeight.MEDIUM, 14));
 		patientMedicationsAddButton.setMaxHeight(30); 
 		patientMedicationsAddButton.setMaxWidth(200);
 		patientMedicationsAddButton.setStyle("-fx-text-fill: white; -fx-background-color: cornflowerblue;");
+		patientMedicationsAddButton.setDisable(true);
 		
 		patientMedicationsDisplayTextArea = new TextArea();
 		patientMedicationsDisplayTextArea.setMaxHeight(100);
 		patientMedicationsDisplayTextArea.setMaxWidth(200);
 		patientMedicationsDisplayTextArea.setFont(Font.font("Verdana", 14));
 		patientMedicationsDisplayTextArea.setEditable(false);
-		patientMedicationsDisplayTextArea.setMouseTransparent(true);
 		patientMedicationsDisplayTextArea.setFocusTraversable(false);
 		
 		patientMedicationsSaveButton = new Button("Save Patient Medications");
 		patientMedicationsSaveButton.setFont(Font.font("Verdana", FontWeight.MEDIUM, 14));
 		patientMedicationsSaveButton.setMaxHeight(30); 
 		patientMedicationsSaveButton.setMaxWidth(200);
-		
+		patientMedicationsSaveButton.setDisable(true);
+
 		rightDoctorHomePageVBox = new VBox();
 		
 		rightDoctorHomePageVBox.getChildren().add(patientMedicationsLabel);
@@ -248,16 +264,127 @@ public class DoctorHomePage extends VBox {
 		
 	/* END OF MAIN HBOX UI */
 
-		this.getChildren().add(patientInformationLabelVBox);
-		patientInformationLabelVBox.setAlignment(Pos.CENTER);
+		this.getChildren().add(patientInformationVBox);
+		patientInformationVBox.setAlignment(Pos.CENTER);
 
 		this.getChildren().add(mainDoctorHomePageHBox);
 		mainDoctorHomePageHBox.setAlignment(Pos.CENTER);
 		
+		patientInformationEntryButton.setOnAction(new EventHandler<>() {
+	        public void handle(ActionEvent event) {
+	        	patientDir = new File(PATIENT_FILE_DIRECTORY, patientInformationEntryTextField.getText());
+	        	
+	        	if(!patientDir.exists()) {
+	        		if(!patientInformationVBox.getChildren().contains(patientInformationErrorLabel)) {
+	        			patientInformationVBox.getChildren().add(patientInformationErrorLabel);
+	        			patientInformationVBox.setAlignment(Pos.CENTER);
+	        		}
+	        	}
+	        	else {
+	        		patientInformationVBox.getChildren().clear();
+	        		
+	        		int underScore = patientInformationEntryTextField.getText().indexOf('_');
+	        		
+	        		String patientFirstName = patientInformationEntryTextField.getText().substring(0, underScore);
+	        		patientFirstName = patientFirstName.substring(0, 1).toUpperCase() + patientFirstName.substring(1);
+	        		
+	        		int indexOfNumber = 0;
+	        		
+	        		while(!Character.isDigit(patientInformationEntryTextField.getText().charAt(indexOfNumber)))
+	        		{
+	        			indexOfNumber++;
+	        		}
+	        			
+	        		String patientLastName = patientInformationEntryTextField.getText().substring(underScore + 1, indexOfNumber);
+	        		patientLastName = patientLastName.substring(0, 1).toUpperCase() + patientLastName.substring(1);
+	        		
+	        		patientInformationLabel.setText(patientFirstName + " " + patientLastName + "'s Information");
+	        		patientInformationVBox.getChildren().add(patientInformationLabel);
+	        		
+	        		patientFindingsEntryTextArea.setEditable(true);
+	        		patientFindingsEntryTextArea.setMouseTransparent(false);
+	        		patientFindingsEntryTextArea.setFocusTraversable(true);
+	        		
+	        		patientMedicationsEntryTextArea.setEditable(true);
+	        		patientMedicationsEntryTextArea.setMouseTransparent(false);
+	        		patientMedicationsEntryTextArea.setFocusTraversable(true);
+	        		
+	        		patientFindingsAddButton.setDisable(false);
+	        		patientMedicalRecordsButton.setDisable(false);
+	        		patientMedicationsAddButton.setDisable(false);
+	        	}
+	        }
+	    });
+		
+		patientFindingsAddButton.setOnAction(new EventHandler<>() {
+	        public void handle(ActionEvent event) {
+	        	if(!patientFindingsEntryTextArea.getText().equals("")) {
+	        	patientFindingsDisplayTextArea.setText(patientFindingsEntryTextArea.getText());
+	        	
+        		patientFindingsSaveButton.setDisable(false);
+        		
+				patientFindingsEntryTextArea.clear();
+	        	}
+	        }
+	    });
+		
+		patientMedicationsAddButton.setOnAction(new EventHandler<>() {
+	        public void handle(ActionEvent event) {
+	        	if(!patientMedicationsEntryTextArea.getText().equals("")) {
+		        	patientMedicationsDisplayTextArea.setText(patientMedicationsEntryTextArea.getText());
+		        	
+	        		patientMedicationsSaveButton.setDisable(false);
+	        		
+					patientMedicationsEntryTextArea.clear();
+	        	}
+	        }
+	    });
+		
+		patientFindingsSaveButton.setOnAction(new EventHandler<>() {
+	        public void handle(ActionEvent event) {
+	        	try {
+	        		File patientDirNotes = new File(patientDir, "notes.txt");
+
+					try (FileWriter fileWriter = new FileWriter(patientDirNotes, true)) {
+						fileWriter.write(patientFindingsDisplayTextArea.getText() + "\n");
+					}
+	        	} catch (NoSuchFileException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+	        	
+	        	patientFindingsDisplayTextArea.clear();
+	        }
+	    });
+		
+		patientMedicationsSaveButton.setOnAction(new EventHandler<>() {
+	        public void handle(ActionEvent event) {
+	        	try {
+	        		File patientDirMedications = new File(patientDir, "medications.txt");
+
+					try (FileWriter fileWriter = new FileWriter(patientDirMedications, true)) {
+						fileWriter.write(patientMedicationsDisplayTextArea.getText() + "\n");
+					}
+				} catch (NoSuchFileException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+	        	
+	        	patientMedicationsDisplayTextArea.clear();
+	        }
+	    });
+		
 		patientMedicalRecordsButton.setOnAction(new EventHandler<>() {
-	        public void handle(ActionEvent event)
-	        {
-	        	stage.goToPatientMedicalRecordsPage();
+	        public void handle(ActionEvent event) {
+				patientFindingsEntryTextArea.clear();
+				patientMedicationsEntryTextArea.clear();
+				
+				patientFindingsDisplayTextArea.clear();
+				patientMedicationsDisplayTextArea.clear();
+				
+	        	stage.goToPatientMedicalRecordsPage(patientDir);
 	        }
 	    });
 	}

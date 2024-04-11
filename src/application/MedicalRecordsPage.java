@@ -1,7 +1,11 @@
 package application;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.Scanner;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -49,13 +53,13 @@ public class MedicalRecordsPage extends VBox {
 	VBox patientInformationButtonVBox;
 	Button patientInformationButton;
 	
-	public MedicalRecordsPage(DoctorView stage, String doctorTextFile) {
+	public MedicalRecordsPage(DoctorView stage, File patientDir) {
 		doctorViewStage = stage;
 		
 		/* START OF UPPER HBOX UI */
 		
 		try {
-			inputStream = new FileInputStream("/Logo/logoName.jpeg");//changed path to LittleSteps/Logo directory
+			inputStream = new FileInputStream(System.getProperty("user.home") + "/Documents/Logo/logoName.jpeg");
 		} catch (FileNotFoundException e) {
 			System.out.println("File not found");
 		} 
@@ -76,8 +80,28 @@ public class MedicalRecordsPage extends VBox {
 		patientMedicalRecordsTextArea.setMaxHeight(100);
 		patientMedicalRecordsTextArea.setMaxWidth(200);
 		patientMedicalRecordsTextArea.setEditable(false);
-		patientMedicalRecordsTextArea.setMouseTransparent(true);
 		patientMedicalRecordsTextArea.setFocusTraversable(false);
+		
+		File patientDirContactInfo = new File(patientDir, "contactInfo.txt");
+		Scanner fileReader = null;
+		
+		try {
+			fileReader = new Scanner(patientDirContactInfo);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		
+		String contactInfo = "";
+		
+		while(fileReader.hasNextLine())
+		{
+			contactInfo += fileReader.nextLine();
+			contactInfo += "\n";
+		}
+			
+		fileReader.close();
+		
+		patientMedicalRecordsTextArea.setText(contactInfo);
 		
 		upperMedicalRecordsPageHBox = new HBox();
 		
@@ -89,7 +113,6 @@ public class MedicalRecordsPage extends VBox {
 		upperMedicalRecordsPageHBox.getChildren().add(patientMedicalRecordsTextArea);
 		
 		upperMedicalRecordsPageHBox.setPadding(new Insets(0, 0, 40, 0));
-		// upperMedicalRecordsPageHBox.setSpacing(100);
 		
 		/* END OF UPPER HBOX UI */
 
@@ -105,8 +128,27 @@ public class MedicalRecordsPage extends VBox {
 		previousHealthProblemsTextArea.setMaxHeight(100);
 		previousHealthProblemsTextArea.setMaxWidth(200);
 		previousHealthProblemsTextArea.setEditable(false);
-		previousHealthProblemsTextArea.setMouseTransparent(true);
 		previousHealthProblemsTextArea.setFocusTraversable(false);
+		
+		File patientDirHealthIssues = new File(patientDir, "healthIssues.txt");
+		
+		try {
+			fileReader = new Scanner(patientDirHealthIssues);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		
+		String healthIssues = "";
+		
+		while(fileReader.hasNextLine())
+		{
+			healthIssues += fileReader.nextLine();
+			healthIssues += "\n";
+		}
+			
+		fileReader.close();
+		
+		previousHealthProblemsTextArea.setText(healthIssues);
 		
 		leftMedicalRecordsPageVBox = new VBox();
 		
@@ -129,8 +171,27 @@ public class MedicalRecordsPage extends VBox {
 		previousMedicationsTextArea.setMaxHeight(100);
 		previousMedicationsTextArea.setMaxWidth(200);
 		previousMedicationsTextArea.setEditable(false);
-		previousMedicationsTextArea.setMouseTransparent(true);
 		previousMedicationsTextArea.setFocusTraversable(false);
+		
+		File patientDirMedications = new File(patientDir, "medications.txt");
+		
+		try {
+			fileReader = new Scanner(patientDirMedications);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		
+		String medications = "";
+		
+		while(fileReader.hasNextLine())
+		{
+			medications += fileReader.nextLine();
+			medications += "\n";
+		}
+			
+		fileReader.close();
+		
+		previousMedicationsTextArea.setText(medications);
 		
 		notesAndRecommendationsLabel = new Label("Notes and Recommendations");
 		notesAndRecommendationsLabel.setTextFill(Color.BLACK);
@@ -140,8 +201,27 @@ public class MedicalRecordsPage extends VBox {
 		notesAndRecommendationsTextArea.setMaxHeight(100);
 		notesAndRecommendationsTextArea.setMaxWidth(200);
 		notesAndRecommendationsTextArea.setEditable(false);
-		notesAndRecommendationsTextArea.setMouseTransparent(true);
 		notesAndRecommendationsTextArea.setFocusTraversable(false);
+		
+		File patientDirNotes = new File(patientDir, "notes.txt");
+		
+		try {
+			fileReader = new Scanner(patientDirNotes);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		
+		String notes = "";
+		
+		while(fileReader.hasNextLine())
+		{
+			notes += fileReader.nextLine();
+			notes += "\n";
+		}
+			
+		fileReader.close();
+		
+		notesAndRecommendationsTextArea.setText(notes);
 		
 		centerUpperMedicalRecordsPageVBox = new VBox();
 		
@@ -187,8 +267,27 @@ public class MedicalRecordsPage extends VBox {
 		immunizationHistoryTextArea.setMaxHeight(100);
 		immunizationHistoryTextArea.setMaxWidth(200);
 		immunizationHistoryTextArea.setEditable(false);
-		immunizationHistoryTextArea.setMouseTransparent(true);
 		immunizationHistoryTextArea.setFocusTraversable(false);
+		
+		File patientDirImmunizations = new File(patientDir, "immunization.txt");
+		
+		try {
+			fileReader = new Scanner(patientDirImmunizations);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		
+		String immunizations = "";
+		
+		while(fileReader.hasNextLine())
+		{
+			immunizations += fileReader.nextLine();
+			immunizations += "\n";
+		}
+			
+		fileReader.close();
+		
+		immunizationHistoryTextArea.setText(immunizations);
 		
 		rightMedicalRecordsPageVBox = new VBox();
 		
@@ -231,7 +330,7 @@ public class MedicalRecordsPage extends VBox {
 		patientInformationButton.setAlignment(Pos.CENTER);
 		
 		/* START OF BUTTON VBOX UI */
-
+		
 		this.getChildren().add(upperMedicalRecordsPageHBox);
 		upperMedicalRecordsPageHBox.setAlignment(Pos.CENTER);
 		
