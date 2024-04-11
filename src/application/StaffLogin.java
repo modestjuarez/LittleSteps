@@ -107,12 +107,12 @@ class StaffLogin extends Stage {
         			
         			//added code to pop up the nurse homepage when nurse succesfully logs in
         			if(userType == "Nurse") {
-        				NursesHomepage homepage = new NursesHomepage(username);
-        	        	homepage.show();
+        				new NursesHomepage(username);
+        	        	//homepage.show();
         			}else if (userType == "Doctor"){
         				//pop up the doctors page when doctor succesfully logs in
-        				DoctorView docHomepg = new DoctorView(USERS_FILE);
-        				docHomepg.show(); 
+        				DoctorView docsHomepg = new DoctorView();
+        				docsHomepg.show();
         			}
         				
         		} else {

@@ -1,5 +1,7 @@
 package application;
 
+import java.io.File;
+
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
@@ -10,9 +12,8 @@ public class DoctorView extends Stage {
 	DoctorHomePage doctorHomePage;
 	MedicalRecordsPage patientMedicalRecordsPage;
 	
-	public DoctorView(String doctorTextFile) {
-		doctorHomePage = new DoctorHomePage(this, doctorTextFile);
-		patientMedicalRecordsPage = new MedicalRecordsPage(this, doctorTextFile);
+	public DoctorView() {
+		doctorHomePage = new DoctorHomePage(this);
 	
 		doctorViewRoot = new StackPane();	
 		doctorViewRoot.getChildren().add(doctorHomePage);
@@ -32,8 +33,10 @@ public class DoctorView extends Stage {
 		doctorViewRoot.setStyle("-fx-background-color: white;");
 	}
 	
-	public void goToPatientMedicalRecordsPage() {
+	public void goToPatientMedicalRecordsPage(File patientDir) {
 		doctorViewRoot.getChildren().clear();
+		
+		patientMedicalRecordsPage = new MedicalRecordsPage(this, patientDir);
 		
 		doctorViewRoot.getChildren().add(patientMedicalRecordsPage);
 		patientMedicalRecordsPage.setAlignment(Pos.CENTER);
