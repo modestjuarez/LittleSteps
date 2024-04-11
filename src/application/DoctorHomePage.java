@@ -272,7 +272,12 @@ public class DoctorHomePage extends VBox {
 		
 		patientInformationEntryButton.setOnAction(new EventHandler<>() {
 	        public void handle(ActionEvent event) {
-	        	patientDir = new File(PATIENT_FILE_DIRECTORY, patientInformationEntryTextField.getText());
+				if(!patientInformationEntryTextField.getText().equals("")) {
+	        		patientDir = new File(PATIENT_FILE_DIRECTORY, patientInformationEntryTextField.getText());
+	        	}
+	        	else {
+	        		patientDir = new File(PATIENT_FILE_DIRECTORY, "NULL.txt");
+	        	}
 	        	
 	        	if(!patientDir.exists()) {
 	        		if(!patientInformationVBox.getChildren().contains(patientInformationErrorLabel)) {
