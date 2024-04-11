@@ -6,6 +6,8 @@ import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
 import javafx.scene.control.*;
+
+import java.io.File;
 //import javafx.scene.input.KeyEvent;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -25,9 +27,12 @@ public class VitalsForm extends Stage {
 	 * 
 	 ******************************************************************/
 	//Directory path to repo LittleSteps directory. Will create /LittleSteps/patient_data/checked_in if permissions allow
-	//private static final String CHECKED_IN_DIRECTORY = "/patient_data/checked_in";
+	//private static final String CHECKED_IN_DIRECTORY = + File.separator + "patient_data" + File.separator + "checked_in";
 	//Directory path to users /Home/Documents/patient_data folder where patient files are contained 
-	private static final String CHECKED_IN_DIRECTORY = System.getProperty("user.home") + "/Documents/patient_data/checked_in";
+	private static final String CHECKED_IN_DIRECTORY = System.getProperty("user.home") 
+		    + File.separator + "Documents" 
+		    + File.separator + "patient_data" 
+		    + File.separator + "checked_in";
 	
 	/*
 	 * 

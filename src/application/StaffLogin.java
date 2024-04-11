@@ -98,7 +98,7 @@ class StaffLogin extends Stage {
         		String username = nameInput.getText();
         		String password = passwordInput.getText();
         		//Changed code to took for staffMembers directory in this LitteSteps directory/repo
-        		String USERS_FILE = "staffMembers/" + userType + "/" + username + ".txt";
+        		String USERS_FILE = "staffMembers" + File.separator + userType + File.separator + username + ".txt";
 
         		
         		if (isValidUser(username, password, USERS_FILE)) {
