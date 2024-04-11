@@ -101,6 +101,12 @@ class PatientLogin extends Stage {
         
         		String username = nameInput.getText();
         		String password = passwordInput.getText();
+        		
+        		/* 
+        		 * 
+        		 * Code I need to add to retrieve login info inside the /patient_data/firstname_lastnameDOBdigits/login.txt
+        		 * 
+        		 */
         		//Changed code to took for patient_data directory in this LitteSteps directory/repo
         		//String USERS_FILE = "patients_data" + userType + File.separator + username + ".txt";
         		String USERS_FILE = "C:\\Users\\cadem\\OneDrive\\Desktop\\School\\2024\\CSE 360\\patients\\" + username + ".txt";
@@ -233,7 +239,7 @@ class PatientLogin extends Stage {
     }
     
     public void createPatientDirectory(String firstName, String lastName, String dob, String password){
-    	
+    	//need to remove this line below once I get code running correctly
     	//String PATIENT_FILE_DIRECTORY = "C:\\\\Users\\\\cadem\\\\OneDrive\\\\Desktop\\\\School\\\\2024\\\\CSE 360\\\\patients\\\\";
         String textFile = String.format("%s_%s%s.txt", firstName.toLowerCase(), lastName.toLowerCase(), dob);
         File patientFile = new File(PATIENT_FILE_DIRECTORY);
