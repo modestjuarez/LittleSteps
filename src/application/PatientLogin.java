@@ -99,40 +99,31 @@ class PatientLogin extends Stage {
 
         loginButton.setOnAction(e -> {
         	
-        	//add the code that will just pop up the patient homepage once login button is pressed. 
-        	//It's what you would have in the dummy main file you worked on when testing your code
+        	//testing code that will just pop up the patient homepage once login button is pressed. 
+        	PatientView patientPage = new PatientView();
+            patientPage.show();
         
         	System.out.print("Homepage is open without need for login info");
         	/* 
     		 * Code I need to add to retrieve login info inside the /patient_data/firstname_lastnameDOBdigits/login.txt is uncomment below
     		 */
         	
-        	///*
+        	/*
         		String username = nameInput.getText();
         		String password = passwordInput.getText();
         		
         		//Changed code to took for patient_data directory 
-        		String USERS_FILE = "patients_data" + File.separator + username + ".txt";
-        		//String USERS_FILE = "C:\\Users\\cadem\\OneDrive\\Desktop\\School\\2024\\CSE 360\\patients\\" + username + ".txt";
+        		String USERS_FILE = System.getProperty("user.home") + File.separator + "Documents" + File.separator + "patients_data" + File.separator + username + ".txt";
         		if (isValidUser(username, password, USERS_FILE)) {
         			
-        			/************************************************************
-        			 * 
-        			 * 
-        			 * **********************************************************
-        			 * code to pop up the patients homepage goes here
-        			 ************************************************************
-        			 *
-        			 *
-        			 ************************************************************/
-        			
-        			//main.showNurseHomepage();
+        			PatientView patientPage = new PatientView();
+                    patientPage.show();
         			
         		} else {
       
         			System.out.println("Unsuccesful login.");
         		}
-        		///
+        		*/
 
         });
         
