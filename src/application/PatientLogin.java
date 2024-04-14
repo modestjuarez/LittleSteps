@@ -108,12 +108,11 @@ class PatientLogin extends Stage {
         				+ File.separator + username;
         		System.out.print(USERS_FILE);
         		if (isValidUser(username, password, USERS_FILE)) {
-        			
+
         			PatientView patientPage = new PatientView();
                     patientPage.show();
         			
         		} else {
-      
         			System.out.println("Unsuccesful login.");
         		}
         });
