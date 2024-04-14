@@ -87,17 +87,6 @@ public class NursesHomepage extends Stage{
              */
         });
         
-        //Placeholder for profile button action
-        //profileButton.setOnAction(event -> {
-        	/*
-        	 * 
-    		 * *************************************************************************
-    		 * 		      Code goes here if nurses end up having a profile       	   *
-    		 * *************************************************************************
-    		 *
-             */
-        //});
-
         //Placeholder for logout button action
         logoutButton.setOnAction(event -> {	
         	this.close();//closes the stage for the Nurse's homepage
