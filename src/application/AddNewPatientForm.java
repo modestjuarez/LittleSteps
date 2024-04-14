@@ -7,6 +7,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.control.*;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import java.time.LocalDate;
+import java.time.Period;
 
 public class AddNewPatientForm extends Stage {
     
@@ -14,9 +15,8 @@ public class AddNewPatientForm extends Stage {
     	//form setup for the patient info form
         VBox formLayout = new VBox(10);
         formLayout.setPadding(new Insets(15, 15, 15, 15));
-        
 
-        //Form fields
+        //form fields
         Label firstNameLabel = new Label("First Name:");
         TextField firstNameField = new TextField();
         firstNameField.setPromptText("Enter patients first name");
@@ -45,7 +45,7 @@ public class AddNewPatientForm extends Stage {
         TextField pharmacyField = new TextField();
         pharmacyField.setPromptText("Enter patients preferred pharmacy");
         
-        //Allows nurse to select date and time of appointment
+        //allows nurse to select date and time of appointment
         Label appointmentLabel = new Label("Appointment Date and Time:");
         DatePicker appointmentDatePicker = new DatePicker();
         appointmentDatePicker.setPromptText("Select appointment date");
@@ -66,10 +66,10 @@ public class AddNewPatientForm extends Stage {
         TextArea immunizationArea = new TextArea();
         immunizationArea.setPromptText("Enter the patients immunization history");
 
-        //Save the patients information and create the patient directory then close the form after confirmation message
+        //save the patients information and create the patient directory then close the form after confirmation message
         Button saveInfoButton = new Button("Save");
         saveInfoButton.setOnAction(event -> {
-        	//Collect input information from the form
+        	//collect input information from the form
         	String firstName = firstNameField.getText();
             String lastName = lastNameField.getText();
             LocalDate dob = dobPicker.getValue();
@@ -78,33 +78,31 @@ public class AddNewPatientForm extends Stage {
             String medications = medicationsArea.getText();
             String pharmacy = pharmacyField.getText();
             LocalDate appointmentDate = appointmentDatePicker.getValue();
-            String appointmentTime = timePicker.getSelectionModel().getSelectedItem(); // For ComboBox timePicker
+            String appointmentTime = timePicker.getSelectionModel().getSelectedItem(); //timePicker
             String notes = notesArea.getText();
             String immunizationHistory = immunizationArea.getText();
 
             //check that required contact information fields are filled
             if (firstName.isEmpty() || lastName.isEmpty() || dob == null || email.isEmpty()) {
-                //Show error message if there are empty  contact info fields
+                //show error message if there are empty  contact info fields
                 new Alert(Alert.AlertType.ERROR, "Please fill in all required fields.").showAndWait();
+            } else if (Period.between(dob, LocalDate.now()).getYears() < 12) {
+                //show error if the patient is younger than 12 years old
+                new Alert(Alert.AlertType.ERROR, "Cannot create profile. Patient must be at least 12 years old.").showAndWait();
             } else {
             	try {
-                    //Construct appointment string to pass to the patientFileManager 
+                    //construct appointment string to pass to the patientFileManager 
                     String appointment = (appointmentDate != null ? appointmentDate.toString() : "") +
                                          " " + (appointmentTime != null ? appointmentTime : "");
 
-                    //Create instance and pass the collected data from the form
+                    //create instance and pass the collected data from the form
                     PatientFileManager newPatient = new PatientFileManager();
                     newPatient.createPatientDirectory(firstName, lastName, dob, email, healthIssues, medications, pharmacy, appointment, notes, immunizationHistory);
 
-                    //If no exceptions thrown, show a success message
-                    //Alert successAlert = new Alert(Alert.AlertType.INFORMATION, "Patient profile created successfully.");
-                    //successAlert.setHeaderText("Success");
-                    //successAlert.showAndWait();
-
-                    //Close the form
+                    //close the form
                     this.close();
                 } catch (Exception e) {
-                    //If there's an exception, show an error message
+                    //if there's an exception, show an error message
                     Alert errorAlert = new Alert(Alert.AlertType.ERROR, "Error encountered when creating patient profile: " + e.getMessage());
                     errorAlert.setHeaderText("Error");
                     errorAlert.showAndWait();
@@ -112,7 +110,7 @@ public class AddNewPatientForm extends Stage {
             }
         });//end of action event for save button
 
-        // Add all fields and the button to the form layout
+        //add all fields and the button to the form layout
         formLayout.getChildren().addAll(
                 firstNameLabel, firstNameField, 
                 lastNameLabel, lastNameField,
@@ -127,14 +125,14 @@ public class AddNewPatientForm extends Stage {
                 saveInfoButton
             );
         
-        //Put formLayout in a ScrollPane to allow nurse to scroll through form
+        //put formLayout in a ScrollPane to allow nurse to scroll through form
         ScrollPane scrollPane = new ScrollPane();
-        scrollPane.setContent(formLayout); // Set the VBox as the content of the scroll pane
-        scrollPane.setFitToWidth(true); // Ensures the content width is bounded by the width of the ScrollPane
-        //Show vertical scrollbar as needed
+        scrollPane.setContent(formLayout); //set the VBox as the content of the scroll pane
+        scrollPane.setFitToWidth(true); //this part ensures the content width is bounded by the width of the ScrollPane
+        //show vertical scrollbar as needed
         scrollPane.setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
         
-        //Set scene and show stage
+        //set scene and show stage
         Scene scene = new Scene(scrollPane, 600, 600); //(width, height)
         this.setScene(scene);
         this.setTitle("Add New Patient");

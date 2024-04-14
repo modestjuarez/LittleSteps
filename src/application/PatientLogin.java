@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
@@ -85,7 +86,7 @@ class PatientLogin extends Stage {
         mainLabel.setStyle("-fx-font-size: 16px; -fx-text-fill: rgba(0, 120, 220, 0.8);");
         
         TextField nameInput = new TextField();
-        nameInput.setPromptText("Username");
+        nameInput.setPromptText("Username format: FirstName_LastNameDOB(MMDDYY)");
 
         PasswordField passwordInput = new PasswordField();
         passwordInput.setPromptText("Password");
@@ -98,42 +99,22 @@ class PatientLogin extends Stage {
         loginButton.setPrefWidth(200);
 
         loginButton.setOnAction(e -> {
-        	
-        	//add the code that will just pop up the patient homepage once login button is pressed. 
-        	//It's what you would have in the dummy main file you worked on when testing your code
-        
-        	System.out.print("Homepage is open without need for login info");
-        	/* 
-    		 * Code I need to add to retrieve login info inside the /patient_data/firstname_lastnameDOBdigits/login.txt is uncomment below
-    		 */
-        	
-        	///*
+        		//code to retrieve login info inside the /patient_data/firstname_lastnameDOBdigits/login.txt is below
         		String username = nameInput.getText();
         		String password = passwordInput.getText();
         		
-        		//Changed code to took for patient_data directory 
-        		String USERS_FILE = "patients_data" + File.separator + username + ".txt";
-        		//String USERS_FILE = "C:\\Users\\cadem\\OneDrive\\Desktop\\School\\2024\\CSE 360\\patients\\" + username + ".txt";
+        		//fixed code to took for patient_data directory 
+        		String USERS_FILE = System.getProperty("user.home") + File.separator + "Documents" + File.separator + "patient_data" 
+        				+ File.separator + username;
+        		System.out.print(USERS_FILE);
         		if (isValidUser(username, password, USERS_FILE)) {
-        			
-        			/************************************************************
-        			 * 
-        			 * 
-        			 * **********************************************************
-        			 * code to pop up the patients homepage goes here
-        			 ************************************************************
-        			 *
-        			 *
-        			 ************************************************************/
-        			
-        			//main.showNurseHomepage();
+
+        			PatientView patientPage = new PatientView();
+                    patientPage.show();
         			
         		} else {
-      
         			System.out.println("Unsuccesful login.");
         		}
-        		///
-
         });
         
         createAccount.setOnAction(e -> {
@@ -170,20 +151,20 @@ class PatientLogin extends Stage {
     }
 
     private boolean isValidUser(String username, String password, String USERS_FILE) {
-        try (BufferedReader br = new BufferedReader(new FileReader(USERS_FILE))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                String[] parts = line.split(" ");
-                if (parts.length == 2 && parts[0].equals(username) && parts[1].equals(password)) {
-                    return true;
-                }
-                else if (parts[0].equals(username) && !parts[1].equals(password))
-                {
-                	showAlert("Incorrect Password", "Please enter correct password.");
-                }
+    	Path loginFilePath = Paths.get(PATIENT_FILE_DIRECTORY, username, "login.txt");
+        try {
+        	//read the contents of the login.txt file into a string
+            String storedPassword = Files.readString(loginFilePath).trim(); //trim whitespace
+            //check if the password entered matches the password in the patients file
+            if (storedPassword.equals(password)) {
+                return true; //password matches the stored password
+            } else {
+            	new Alert(Alert.AlertType.ERROR, "The entered password is incorrect.").showAndWait();
             }
-        } catch (IOException e) {
-        	showAlert("No File", "Make sure Username is entered correctly.");
+        } catch (NoSuchFileException e) {
+        	new Alert(Alert.AlertType.ERROR, "Username is incorrect. Could not locate patients profile.").showAndWait();
+        }catch (IOException e) {
+        	new Alert(Alert.AlertType.ERROR, "An error occured while verifying entered info.").showAndWait();
         }
         return false;
     }
@@ -191,7 +172,7 @@ class PatientLogin extends Stage {
     private Map<String, String> createAccount() {
 	    //Create a new stage for the pop up window
 	    final Stage searchWindow = new Stage();
-	    searchWindow.setTitle("Create Account");
+	    searchWindow.setTitle("Create Patient Account");
 	    
 	    //VBox for layout
 	    VBox searchVbox = new VBox(20);
@@ -214,12 +195,13 @@ class PatientLogin extends Stage {
 	        if (firstNameField.getText().isEmpty() || lastNameField.getText().isEmpty() || dobField.getText().isEmpty() || password.getText().isEmpty()) {
 	            new Alert(Alert.AlertType.ERROR, "All fields must be filled.").showAndWait();
 	        } else {
-	        	if (isValidAccount(firstNameField.getText(), lastNameField.getText(), dobField.getText()))
-	        			{
-	        				createPatientDirectory(firstNameField.getText(), lastNameField.getText(), dobField.getText(), password.getText());
-	        				searchWindow.close();
-	        			}
-	        	else {
+	        	if (isValidAccount(firstNameField.getText().toLowerCase(), lastNameField.getText().toLowerCase(), dobField.getText())){
+	        		//fixed path to the patients directory and the login file where the new password will be stored
+	        		Path pathToLoginFile = Paths.get(System.getProperty("user.home") + File.separator + "Documents" + File.separator + "patient_data"
+	        				+ File.separator +firstNameField.getText().toLowerCase() + "_" + lastNameField.getText().toLowerCase() + dobField.getText() + File.separator + "login.txt");
+	        		createPatientPassword(pathToLoginFile, password.getText());
+	        		searchWindow.close();
+	        	} else {
 	        		new Alert(Alert.AlertType.ERROR, "User does not exist").showAndWait();
 	        	}
 	        }
@@ -242,27 +224,20 @@ class PatientLogin extends Stage {
     
     private boolean isValidAccount(String firstName, String lastName, String dob)
     {
-    	Path path = Paths.get("C:\\Users\\cadem\\OneDrive\\Documents\\patient_data\\" + firstName + "_" + lastName + dob + "\\contactInfo.txt");
+    	//fixed path to patients directory
+    	Path path = Paths.get(System.getProperty("user.home") + File.separator + "Documents" + File.separator + "patient_data"
+    				+ File.separator +firstName + "_" + lastName + dob);
         return Files.exists(path);
     }
     
-    public void createPatientDirectory(String firstName, String lastName, String dob, String password){
-    	//need to remove this line below once I get code running correctly
-    	//String PATIENT_FILE_DIRECTORY = "C:\\\\Users\\\\cadem\\\\OneDrive\\\\Desktop\\\\School\\\\2024\\\\CSE 360\\\\patients\\\\";
-        String textFile = String.format("%s_%s%s.txt", firstName.toLowerCase(), lastName.toLowerCase(), dob);
-        File patientFile = new File(PATIENT_FILE_DIRECTORY);
-        String userinfo = firstName.toLowerCase() + "_" + lastName.toLowerCase() + dob + " " + password;
-        
-     
-        //create each file and write the information provided by the nurse
-        try {
-        	Files.write(Paths.get(patientFile.getPath(), textFile), userinfo.getBytes());
-            //emtpy login file that will be filled in once the user creates their login account
-            
-        } catch (IOException e) {
-            e.printStackTrace();
-            Alert errorAlert = new Alert(Alert.AlertType.ERROR, "Could not create account.");
-            errorAlert.showAndWait();
-        }
+    //fixed method used to create the patients password
+    private void createPatientPassword(Path loginFilePath, String newLoginPasswd) {
+    	try {
+			Files.write(loginFilePath, newLoginPasswd.getBytes());//write to the login.txt file in patiens file
+		} catch (IOException e) {
+			e.printStackTrace();
+			new Alert(Alert.AlertType.ERROR, "Could not update login password.").showAndWait();
+		}
     }
+    
 }

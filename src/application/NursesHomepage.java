@@ -1,6 +1,7 @@
 package application;
 
 import java.io.File;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -37,7 +38,7 @@ public class NursesHomepage extends Stage{
         logo.setPadding(new Insets(15, 12, 15, 12));
         logo.setSpacing(10);
         logo.setAlignment(Pos.CENTER_LEFT);
-        logo.setStyle("-fx-background-color: white;");//background color for hbox
+        logo.setStyle("-fx-background-color: white;");//background color for logo background
 
         //Load the logo image, throw an error if image file not found
         File logoFile = new File(LITTLESTEPS_LOGO);
@@ -51,21 +52,15 @@ public class NursesHomepage extends Stage{
             logoView.setPreserveRatio(true);
             logo.getChildren().add(logoView); //Add the logoView to the logo hbox
         }
-		
-		/**************************************************
-		        *  Code to retrieve nurse name  *
-         * ************************************************/
         
         //create an array of all the nurse files in the Nurse directory
         String nurse = "Nurse " + nurseUsername.substring(5, nurseUsername.length());//Adds space after the word Nurse
-
-   
 		
         //Set up the top menu bar of the homepage
         HBox menuBar = new HBox();
         menuBar.setPadding(new Insets(15, 12, 15, 12));
         menuBar.setSpacing(10);
-        menuBar.setStyle("-fx-background-color: #3c3c3c;");//grey color for the menu bar
+        menuBar.setStyle("-fx-background-color: #3c3c3c;");//grey color for the menu bar background color
 
         //Welcome message for the specific nurse
         Text welcomeText = new Text("Welcome " + nurse + "!");
@@ -77,52 +72,39 @@ public class NursesHomepage extends Stage{
 
         //Buttons for the top menu bar
         Button messagesButton = new Button("Messages");
-        Button profileButton = new Button("Profile");
+        //Button profileButton = new Button("Profile");
         Button logoutButton = new Button("Log Out");
 
         //Placeholder for message button action
         messagesButton.setOnAction(event -> {
         	/*
         	 * 
-    		 * **************************************
-    		 * 		      Code goes here       	   *
-    		 * **************************************
+    		 * *********************************************************
+    		 * 		      Code from Kaden Madson goes here       	   *
+    		 * *********************************************************
+    		 * 
     		 *
              */
         });
         
-      //Placeholder for profile button action
-        profileButton.setOnAction(event -> {
+        //Placeholder for profile button action
+        //profileButton.setOnAction(event -> {
         	/*
         	 * 
-    		 * **************************************
-    		 * 		      Code goes here       	   *
-    		 * **************************************
+    		 * *************************************************************************
+    		 * 		      Code goes here if nurses end up having a profile       	   *
+    		 * *************************************************************************
     		 *
              */
-        });
-
+        //});
 
         //Placeholder for logout button action
-        logoutButton.setOnAction(event -> {
-        	/*
-        	 * 
-    		 * **************************************
-    		 * 		      Code goes here       	   *
-    		 * **************************************
-    		 *
-             */
+        logoutButton.setOnAction(event -> {	
+        	this.close();//closes the stage for the Nurse's homepage
         });
 
         //Add all buttons to menu bar
-        menuBar.getChildren().addAll(welcomeText, spacer, messagesButton, profileButton, logoutButton);
-
-        
-        /****************************************
-         * 
-         * Code for patient list table/chart here
-         * 
-         ****************************************/
+        menuBar.getChildren().addAll(welcomeText, spacer, messagesButton, logoutButton);
         
         Button checkInPatientBttn = new Button("Check-In Patient for Appointment");
         checkInPatientBttn.setOnAction(event -> {
@@ -135,16 +117,19 @@ public class NursesHomepage extends Stage{
             //get the path to the patient directory
             Path patientDirPath = manager.findPatientDirectory(patientInfo.get("firstName"), patientInfo.get("lastName"), dob);
             
-            //pop up with the vitals form to fill into the patients directory
-            //it will also move the directory into a seperate checked_in directory once the vitals text file is created
-        	VitalsForm vitalsForm = new VitalsForm(patientDirPath);
-            vitalsForm.showAndWait();//wait until form is closed to move forward
+            if(patientDirPath != null && Files.exists(patientDirPath)) {
+            	//pop up with the vitals form to fill into the patients directory
+            	//it will also move the directory into a seperate checked_in directory once the vitals text file is created
+            	new VitalsForm(patientDirPath).showAndWait();//wait until form is closed to move forward
+            } else { //show error
+            	new Alert(Alert.AlertType.ERROR, "Patient was not found that matched the entered info.").showAndWait();
+            }
         });//end of action
         
         //Button to add new patient
         Button addNewPatientBttn = new Button("Add New Patient");
         addNewPatientBttn.setOnAction(event -> {
-        	//Will show the new patient fill in form when the button is clicked
+        	//Will show a form for the nurse to fill in with patient info
         	new AddNewPatientForm();
         });
         
@@ -156,9 +141,9 @@ public class NursesHomepage extends Stage{
         HBox checkInBttnBox = new HBox();
         checkInBttnBox.setAlignment(Pos.CENTER);
         checkInBttnBox.getChildren().add(checkInPatientBttn);
-        checkInBttnBox.setPadding(new Insets(10, 0, 10, 0)); // Add some padding at the top and bottom
+        checkInBttnBox.setPadding(new Insets(10, 0, 10, 0));
 
-        // HBox for the add patient button to center it
+        //HBox for the add patient button to center it
         HBox addPatientBttnBox = new HBox();
         addPatientBttnBox.setAlignment(Pos.CENTER);
         addPatientBttnBox.getChildren().add(addNewPatientBttn);
@@ -171,7 +156,6 @@ public class NursesHomepage extends Stage{
         Scene scene = new Scene(mainLayout, 800, 600);
         this.setScene(scene);
         this.setTitle("Little Steps Pediatrics");
-		
 		
 	}
 	
