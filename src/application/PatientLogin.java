@@ -99,17 +99,7 @@ class PatientLogin extends Stage {
         loginButton.setPrefWidth(200);
 
         loginButton.setOnAction(e -> {
-        	
-        	//testing code that will just pop up the patient homepage once login button is pressed. 
-        	//PatientView patientPage = new PatientView();
-            //patientPage.show();
-        
-        	//System.out.print("Homepage is open without need for login info");
-        	/* 
-    		 * Code I need to add to retrieve login info inside the /patient_data/firstname_lastnameDOBdigits/login.txt is uncomment below
-    		 */
-        	
-        	
+        		//code to retrieve login info inside the /patient_data/firstname_lastnameDOBdigits/login.txt is below
         		String username = nameInput.getText();
         		String password = passwordInput.getText();
         		
@@ -126,8 +116,6 @@ class PatientLogin extends Stage {
       
         			System.out.println("Unsuccesful login.");
         		}
-        		
-
         });
         
         createAccount.setOnAction(e -> {
