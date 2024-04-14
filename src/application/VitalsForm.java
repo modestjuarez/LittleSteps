@@ -40,7 +40,7 @@ public class VitalsForm extends Stage {
 	 *
 	 */
 	
-	//Patient directory path that will store the vitals info for the patients directory
+	//patient directory path that will store the vitals info for the patients directory
 	private Path patientDirectoryPath;
 	
 	//flag to confirm if vitals file was created
@@ -89,7 +89,7 @@ public class VitalsForm extends Stage {
             }
         });*/
         
-        //Save button to save info entered
+        //save button to save info entered
         Button saveVitalsBttn = new Button("Save Vitals");
         saveVitalsBttn.setOnAction(event -> {
         	//Concatonate all the vitals into one string variable to pass to saveVitalsButton method
@@ -101,7 +101,7 @@ public class VitalsForm extends Stage {
         	        heightField.getText(),
         	        bmiField.getText()
         	        );
-            //Save vitals data and create doctors appointment file
+            //save vitals data and create doctors appointment file
         	saveVitalsData(vitalsData);
         	/*
         	 * 
@@ -129,7 +129,7 @@ public class VitalsForm extends Stage {
                 saveVitalsBttn
         );
 
-        //Allow nurse to scroll in order to fill out all fields
+        //allow nurse to scroll in order to fill out all fields
         ScrollPane scrollPane = new ScrollPane(formLayout);
         scrollPane.setFitToWidth(true);
         scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
@@ -143,7 +143,7 @@ public class VitalsForm extends Stage {
     //method to save the vitals data text file inside the patients directory
     private void saveVitalsData(String vitalsData) {
     	
-        //Code to format the way the text file will be saved: vitalsMMddyy.txt
+        //code to format the way the text file will be saved: vitalsMMddyy.txt
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MMddyy");
         LocalDate localDate = LocalDate.now();
         String fileName = "vitals" + dtf.format(localDate) + ".txt";
@@ -212,7 +212,7 @@ public class VitalsForm extends Stage {
                 Files.createDirectories(checkedInPath);
             }
 
-            //Check if the patients directory already exists in the checked_in directory
+            //check if the patients directory already exists in the checked_in directory
             //Platform.runLater() executes the message once the form closes. I used it to prevent NotOnFxApplicationThreadException error
             if (Files.exists(targetPath)) {
                 Platform.runLater(() -> new Alert(Alert.AlertType.ERROR, "A directory with the same name already exists in the checked_in folder.").showAndWait());

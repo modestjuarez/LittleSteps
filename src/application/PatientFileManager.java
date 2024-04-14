@@ -82,37 +82,37 @@ public class PatientFileManager {
     //method to pull the patient file information from the patient directory
     public Map<String, String> loadPatientProfile(String firstName, String lastName, LocalDate dob) {
     	
-        //Create the string for the directory name in the way the patient directory is formatted: firstName_lastNameDOBdigits
+        //create the string for the directory name in the way the patient directory is formatted: firstName_lastNameDOBdigits
     	String dobFormatted = dob.format(DateTimeFormatter.ofPattern("MMddyy"));
         String directoryName = String.format("%s_%s%s", firstName.toLowerCase(), lastName.toLowerCase(), dobFormatted);
 
-        //Path to the patient's directory
+        //path to the patient's directory
         Path patientDirectory = Paths.get(PATIENT_FILE_DIRECTORY, directoryName);
 
-        //Map to hold the patient's information
+        //map to hold the patient's information
         Map<String, String> patientInfo = new HashMap<>();
 
         //retrieve all the patient info if the patient is located, otherwise throw an error message
         if (Files.exists(patientDirectory)) {
-            //List of files from the patient's directory
+            //list of files from the patient's directory
             String[] filesToRead = {"contactInfo.txt", "appointment.txt", "medications.txt", "immunization.txt", "notes.txt", "healthIssues.txt", "pharmacy.txt"};
 
-            //Iterate through array of file names
+            //iterate through array of file names
             for (int i = 0; i < filesToRead.length; i++) {
                 String fileName = filesToRead[i];
                 Path filePath = patientDirectory.resolve(fileName);
                 try {
-                    //Read the content of the file
+                    //read the content of the file
                     String content = Files.readString(filePath);
-                    //Store the content in the map with the filename (without extension) as the key
+                    //store the content in the map with the filename (without extension) as the key
                     patientInfo.put(fileName.substring(0, fileName.indexOf('.')), content);
                 } catch (IOException e) {
-                    //Alert nurse if file doesn't exist or an IO error occurs
+                    //alert nurse if file doesn't exist or an IO error occurs
                 	new Alert(Alert.AlertType.ERROR, "Error loading file.").showAndWait();
                 }
             }
         } else {
-        	//Show message that patient doesn't exist
+        	//show message that patient doesn't exist
         	new Alert(Alert.AlertType.ERROR, "Patient directory does not exist: " + patientDirectory).showAndWait();
         }
 
@@ -123,7 +123,7 @@ public class PatientFileManager {
     public Path findPatientDirectory(String firstName, String lastName, LocalDate dob) {
         File folder = new File(PATIENT_FILE_DIRECTORY);
         File[] listOfFiles = folder.listFiles();
-        //Exit the method if directory is empty or could not retrieve files
+        //exit the method if directory is empty or could not retrieve files
         if (listOfFiles == null) 
         	return null;
         
@@ -136,12 +136,8 @@ public class PatientFileManager {
             if (file.isDirectory() && file.getName().equals(targetDirName))
                 return file.toPath();
         }
-        //After checking all files, if no directory matches, show error message
+        //after checking all files, if no directory matches, show error message
         new Alert(Alert.AlertType.ERROR, "Directory not found for the patient entered").showAndWait();
         return null; //no directory is found matching the criteria
     }
 }
-
-
-
-

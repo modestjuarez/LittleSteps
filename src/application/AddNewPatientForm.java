@@ -7,6 +7,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.control.*;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import java.time.LocalDate;
+import java.time.Period;
 
 public class AddNewPatientForm extends Stage {
     
@@ -86,6 +87,9 @@ public class AddNewPatientForm extends Stage {
             if (firstName.isEmpty() || lastName.isEmpty() || dob == null || email.isEmpty()) {
                 //Show error message if there are empty  contact info fields
                 new Alert(Alert.AlertType.ERROR, "Please fill in all required fields.").showAndWait();
+            } else if (Period.between(dob, LocalDate.now()).getYears() < 12) {
+                // Show error if the patient is younger than 12 years old
+                new Alert(Alert.AlertType.ERROR, "Cannot create profile. Patient must be at least 12 years old.").showAndWait();
             } else {
             	try {
                     //Construct appointment string to pass to the patientFileManager 
@@ -95,11 +99,6 @@ public class AddNewPatientForm extends Stage {
                     //Create instance and pass the collected data from the form
                     PatientFileManager newPatient = new PatientFileManager();
                     newPatient.createPatientDirectory(firstName, lastName, dob, email, healthIssues, medications, pharmacy, appointment, notes, immunizationHistory);
-
-                    //If no exceptions thrown, show a success message
-                    //Alert successAlert = new Alert(Alert.AlertType.INFORMATION, "Patient profile created successfully.");
-                    //successAlert.setHeaderText("Success");
-                    //successAlert.showAndWait();
 
                     //Close the form
                     this.close();
@@ -112,7 +111,7 @@ public class AddNewPatientForm extends Stage {
             }
         });//end of action event for save button
 
-        // Add all fields and the button to the form layout
+        //Add all fields and the button to the form layout
         formLayout.getChildren().addAll(
                 firstNameLabel, firstNameField, 
                 lastNameLabel, lastNameField,
@@ -129,8 +128,8 @@ public class AddNewPatientForm extends Stage {
         
         //Put formLayout in a ScrollPane to allow nurse to scroll through form
         ScrollPane scrollPane = new ScrollPane();
-        scrollPane.setContent(formLayout); // Set the VBox as the content of the scroll pane
-        scrollPane.setFitToWidth(true); // Ensures the content width is bounded by the width of the ScrollPane
+        scrollPane.setContent(formLayout); //Sets the VBox as the content of the scroll pane
+        scrollPane.setFitToWidth(true); //This part ensures the content width is bounded by the width of the ScrollPane
         //Show vertical scrollbar as needed
         scrollPane.setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
         
