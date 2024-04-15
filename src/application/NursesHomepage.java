@@ -173,7 +173,7 @@ public class NursesHomepage extends Stage{
 	        if (firstNameField.getText().isEmpty() || lastNameField.getText().isEmpty() || dobField.getText().isEmpty()) {
 	            new Alert(Alert.AlertType.ERROR, "All fields must be filled.").showAndWait();
 	        } else {
-	        	searchWindow.close(); //Close the dialog on successful submission
+	        	searchWindow.close();//close the dialog on successful submission
 	        }
 	    });
 
